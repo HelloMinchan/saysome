@@ -127,3 +127,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/* 가상 Dom 전역 수정 여기서부터 */
+html,
+body {
+  height: 100%;
+}
+#root {
+  height: 100%;
+}
