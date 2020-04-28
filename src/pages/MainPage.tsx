@@ -1,15 +1,23 @@
 import React from "react";
-import styled from "styled-components";
 import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import styled from "styled-components";
 
+// import authentications
 import LogoutButton from "../authentications/LogoutButton";
+import { UserInfo } from "../authentications/AuthRequest";
 
 const Container = styled.div`
   height: 100%;
   background-color: green;
 `;
 
-function MainPage({ user, authenticated, logout }: any) {
+interface MainPageProps {
+  user: UserInfo | null;
+  authenticated: boolean;
+  logout: Function;
+}
+
+function MainPage({ user, authenticated, logout }: MainPageProps) {
   const { email, password, name } = user || {};
   return (
     <>
