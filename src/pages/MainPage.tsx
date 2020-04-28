@@ -10,7 +10,6 @@ const Container = styled.div`
 `;
 
 function MainPage({ user, authenticated, logout }: any) {
-  console.log("gdgdgd");
   const { email, password, name } = user || {};
   return (
     <>
