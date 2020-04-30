@@ -14,11 +14,8 @@ import {
 } from "@material-ui/core";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
-// 로고 색깔 변수
-const logoColor = "#fe4365";
-
-// 로그인 버튼 색깔 변수
-const loginButtonColor = "#fc9d9a";
+// import globalData
+import { logoColor, loginButtonColor } from "../globalData";
 
 /*
   로그인 실패 경고창 생성 함수
@@ -39,7 +36,7 @@ interface LoginPageProps extends RouteComponentProps<any> {
                               LoginPage 컴포넌트
                               Arguments : LoginPageProps
                               Return : FunctionComponent
-                              마지막 수정 : 2020.04.29
+                              마지막 수정 : 2020.04.30
 ***************************************************************************************/
 const LoginPage: React.FC<LoginPageProps> = ({
   authenticated,
