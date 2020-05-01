@@ -3,7 +3,18 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import { ApolloProvider } from "@apollo/react-hooks";
+
+// import apolloClient
+import client from "./apolloClient";
+
+ReactDOM.render(
+  // 아폴로 클라이언트 매핑
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
