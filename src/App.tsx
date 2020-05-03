@@ -3,7 +3,7 @@ import {
   RouteComponentProps,
   Route,
   Switch,
-  BrowserRouter as Router,
+  HashRouter as Router,
 } from "react-router-dom";
 
 // import authentications
@@ -23,7 +23,7 @@ import ErrorPage from "./pages/Errorpage";
                               SaySome App 컴포넌트
                               Arguments : void
                               Return : FunctionComponent
-                              마지막 수정 : 2020.04.28
+                              마지막 수정 : 2020.05.03
 ***************************************************************************************/
 const App: React.FC = (): JSX.Element => {
   // 유저 로그인 상태 hooks ( 변수 : user, 함수 : setUser )
