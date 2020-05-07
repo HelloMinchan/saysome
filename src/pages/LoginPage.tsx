@@ -186,6 +186,12 @@ const LoginPage: React.FC<LoginPageProps> = ({
           <Copyright />
         </Box>
       </LoginBottomContainer>
+      {/* 로그인 실패 경고창 */}
+      <Snackbar open={warning} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {"이메일 혹은 비빌먼호를 확인하세요!"}
+        </Alert>
+      </Snackbar>
     </Contatiner>
   );
 };
