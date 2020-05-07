@@ -116,76 +116,76 @@ const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <Contatiner>
       <TitleLogo>{"Say Some"}</TitleLogo>
-      {/* 아이디 입력란 */}
-      <TextField
-        variant="outlined"
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="이메일"
-        name="email"
-        autoComplete="email"
-        autoFocus
-        onChange={({ target: { value } }) => setEmail(value)}
-      />
 
-      {/* 비밀번호 입력란 */}
-      <TextField
-        variant="outlined"
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="비밀번호"
-        type="password"
-        id="password"
-        autoComplete="current-password"
-        onChange={({ target: { value } }) => setPassword(value)}
-      />
+      <LoginLoigcContainer>
+        {/* 아이디 입력란 */}
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="이메일"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          onChange={({ target: { value } }) => setEmail(value)}
+        />
 
-      {/* 로그인 상태 유지 체크 버튼 */}
-      <StyledvFormControlLabel
-        control={<Checkbox value="remember" />}
-        label="로그인 상태 유지"
-      />
+        {/* 비밀번호 입력란 */}
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="비밀번호"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          onChange={({ target: { value } }) => setPassword(value)}
+        />
 
-      {/* 로그인 버튼 */}
-      <StyledButton
-        onClick={loginClick}
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="primary"
-        style={{ background: loginButtonColor, marginBottom: "1%" }}
-      >
-        {"로그인"}
-      </StyledButton>
+        {/* 로그인 상태 유지 체크 버튼 */}
+        <StyledvFormControlLabel
+          control={<Checkbox value="remember" />}
+          label="로그인 상태 유지"
+        />
 
-      <Grid container>
-        {/* 비밀번호 조회 링크 */}
-        <Grid item xs>
-          <Link href="#" variant="body2">
-            {"비밀번호 잊어버리셨나요?"}
-          </Link>
+        {/* 로그인 버튼 */}
+        <StyledButton
+          onClick={loginClick}
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          style={{ background: loginButtonColor, marginBottom: "1%" }}
+        >
+          {"로그인"}
+        </StyledButton>
+
+        <Grid container>
+          {/* 비밀번호 조회 링크 */}
+          <Grid item xs>
+            <Link href="#" variant="body2">
+              {"비밀번호 잊어버리셨나요?"}
+            </Link>
+          </Grid>
+          {/* 회원가입 링크 */}
+          <Grid item>
+            <Link href="#" variant="body2">
+              {"아직 회원이 아니신가요? 가입하기"}
+            </Link>
+          </Grid>
         </Grid>
-        {/* 회원가입 링크 */}
-        <Grid item>
-          <Link href="#" variant="body2">
-            {"아직 회원이 아니신가요? 가입하기"}
-          </Link>
-        </Grid>
-      </Grid>
-      {/* 하단 카피라이트 */}
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-      {/* 로그인 실패 경고창 */}
-      <Snackbar open={warning} autoHideDuration={2000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {"이메일 혹은 비빌먼호를 확인하세요!"}
-        </Alert>
-      </Snackbar>
+      </LoginLoigcContainer>
+
+      <LoginBottomContainer>
+        {/* 하단 카피라이트 */}
+        <Box mt={8}>
+          <Copyright />
+        </Box>
+      </LoginBottomContainer>
     </Contatiner>
   );
 };
@@ -195,21 +195,33 @@ const LoginPage: React.FC<LoginPageProps> = ({
 const Contatiner = styled.div`
   /* background-color: #262626; */
   height: 100%;
+  width: 50%;
   padding-left: 25%;
   padding-right: 25%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 // 로고 컴포넌트
-const TitleLogo = styled.h1`
+const TitleLogo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20%;
+  width: 100%;
   padding-top: 17%;
-  padding-bottom: 10%;
   font-family: "Baloo Tammudu 2", cursive;
   font-size: 10vmax;
   color: ${logoColor};
+`;
+
+// 로그인 로직 부분 높이 지정 컴포넌트
+const LoginLoigcContainer = styled.div`
+  height: 50%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 // 로그인 상태 유지 체크 박스 컴포넌트
@@ -222,6 +234,15 @@ const StyledvFormControlLabel = styled(FormControlLabel)`
 // 로그인 버튼 컴포넌트
 const StyledButton = styled(Button)`
   height: 45px;
+`;
+
+// 로그인 하단 부 높이 지정 컴포넌트
+const LoginBottomContainer = styled.div`
+  display: flex;
+
+  justify-content: center;
+  height: 15%;
+  width: 100%;
 `;
 
 export default LoginPage;
