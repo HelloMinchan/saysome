@@ -8,7 +8,7 @@ dotenv.config();
 
 // 아폴로 클라이언트 생성
 const client: any = new ApolloClient({
-  uri: process.env.REACT_APP_saysome_server,
+  uri: process.env.REACT_APP_saysome_graphql_server,
 });
 
 export default client;

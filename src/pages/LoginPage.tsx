@@ -14,6 +14,9 @@ import {
 } from "@material-ui/core";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
+// import authentications
+import { loginRequest } from "../authentications/AuthRequest";
+
 // import globalData
 import { logoColor, loginButtonColor } from "../globalData";
 
@@ -36,7 +39,7 @@ interface LoginPageProps extends RouteComponentProps<any> {
                               LoginPage 컴포넌트
                               Arguments : LoginPageProps
                               Return : FunctionComponent
-                              마지막 수정 : 2020.04.30
+                              마지막 수정 : 2020.05.07
 ***************************************************************************************/
 const LoginPage: React.FC<LoginPageProps> = ({
   authenticated,
@@ -56,15 +59,19 @@ const LoginPage: React.FC<LoginPageProps> = ({
     Return : void
     ( AuthRequest 파일 loginRequest 함수 사용 )
   */
-  const loginClick: any = (): void => {
-    try {
-      // 로그인 함수로 로그인 시도
-      login({ email, password });
-    } catch (e) {
+  const loginClick: any = async (): Promise<void> => {
+    const userData = await loginRequest(email, password);
+    // 로그인 실패시 API 서버에서 "Error" 문자열 반환됨
+    if (userData === "Error") {
+      // App.tsx의 login Hook 함수에 null 반환
+      login(null);
       // 로그인 실패시 경고창 생성 및 이메일 비빌번호 값 초기화
       setWarning(true);
       setEmail("");
       setPassword("");
+    } else {
+      // App.tsx의 login Hook 함수에 user 객체 반환
+      login(userData);
     }
   };
 
@@ -101,8 +108,8 @@ const LoginPage: React.FC<LoginPageProps> = ({
 
   // location.state로 현재위치를 얻거나 아니면 루트 path
   const from: any = location.state || { from: { pathname: "/" } };
-  // 변경 전 : const { from } = location.state || { from: { pathname: "/" } };
 
+  // 변경 전 : const { from } = location.state || { from: { pathname: "/" } };
   // 만약 로그인 상태일 시 from으로 Redirect
   if (authenticated) return <Redirect to={from} />;
 
@@ -122,6 +129,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
         autoFocus
         onChange={({ target: { value } }) => setEmail(value)}
       />
+
       {/* 비밀번호 입력란 */}
       <TextField
         variant="outlined"
@@ -135,6 +143,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
         autoComplete="current-password"
         onChange={({ target: { value } }) => setPassword(value)}
       />
+
       {/* 로그인 상태 유지 체크 버튼 */}
       <StyledvFormControlLabel
         control={<Checkbox value="remember" />}
@@ -167,12 +176,10 @@ const LoginPage: React.FC<LoginPageProps> = ({
           </Link>
         </Grid>
       </Grid>
-
       {/* 하단 카피라이트 */}
       <Box mt={8}>
         <Copyright />
       </Box>
-
       {/* 로그인 실패 경고창 */}
       <Snackbar open={warning} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">

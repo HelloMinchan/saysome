@@ -1,3 +1,11 @@
+import axios from "axios";
+
+// import dotenv
+import dotenv from "dotenv";
+
+// import .env
+dotenv.config();
+
 // 유저 정보 타입
 export interface UserInfo {
   email: string;
@@ -5,29 +13,30 @@ export interface UserInfo {
   name: string;
 }
 
-// 로그인 유저 정보 타입
-export interface UserInfoForLoginRequest {
-  email: string;
-  password: string;
-}
-
-// 임시 유저 데이터 베이스 객체 ( 차후 GraphQL & Apollo로 변경할 것 )
-const users: Array<UserInfo> = [
-  { email: "test@naver.com", password: "123", name: "정민찬" },
-];
+/*
+  로그인 API 호출 함수
+  Arguments : email, password
+  Return : Promise<UserInfo | string>
+*/
+const loginAxios = async (
+  email: string,
+  password: string
+): Promise<UserInfo | string> => {
+  const data = await axios(
+    `${process.env.REACT_APP_saysome_restful_server}/login/${email}/${password}`
+  );
+  return data.data;
+};
 
 /*
   로그인 함수
-  Arguments : UserInfoForLoginRequest
-  Return : UserInfo
+  Arguments : email, password
+  Return : Promise<UserInfo | string>
 */
-export const loginRequest: Function = ({
-  email,
-  password,
-}: UserInfoForLoginRequest): UserInfo | never => {
-  const user: UserInfo | undefined = users.find(
-    (user) => user.email === email && user.password === password
-  );
-  if (user === undefined) throw new Error();
-  return user;
+export const loginRequest: Function = async (
+  email: string,
+  password: string
+): Promise<UserInfo | string> => {
+  const data = await loginAxios(email, password);
+  return data;
 };
