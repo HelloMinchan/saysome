@@ -9,7 +9,6 @@ import {
   FormControlLabel,
   Grid,
   Link,
-  Box,
   Snackbar,
 } from "@material-ui/core";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
@@ -182,10 +181,9 @@ const LoginPage: React.FC<LoginPageProps> = ({
 
       <LoginBottomContainer>
         {/* 하단 카피라이트 */}
-        <Box mt={8}>
-          <Copyright />
-        </Box>
+        <Copyright />
       </LoginBottomContainer>
+
       {/* 로그인 실패 경고창 */}
       <Snackbar open={warning} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
@@ -245,8 +243,8 @@ const StyledButton = styled(Button)`
 // 로그인 하단 부 높이 지정 컴포넌트
 const LoginBottomContainer = styled.div`
   display: flex;
-
   justify-content: center;
+  align-items: center;
   height: 15%;
   width: 100%;
 `;
