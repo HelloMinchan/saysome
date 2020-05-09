@@ -38,7 +38,7 @@ interface LoginPageProps extends RouteComponentProps<any> {
                               LoginPage 컴포넌트
                               Arguments : LoginPageProps
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.07
+                              마지막 수정 : 2020.05.10
 ***************************************************************************************/
 const LoginPage: React.FC<LoginPageProps> = ({
   authenticated,
@@ -49,36 +49,51 @@ const LoginPage: React.FC<LoginPageProps> = ({
   const [email, setEmail]: [string, Function] = useState<string>("");
   // 유저 로그인 비밀번호 hooks ( 변수 : password, 함수 : setPassword )
   const [password, setPassword]: [string, Function] = useState<string>("");
-  // 로그인 실패 경고창 생성 hooks ( 변수 : warning, 함수 : setWarning )
+
+  // 로그인 실패 경고창 생성 hooks ( 변수 : error, 함수 : setError )
+  const [error, setError]: [boolean, Function] = useState<boolean>(false);
+  // 로그인 응답 실패 경고창 생성 hooks ( 변수 : warning, 함수 : setWarning )
   const [warning, setWarning]: [boolean, Function] = useState<boolean>(false);
 
   /*
     로그인 버튼 클릭 함수
     Arguments : void
-    Return : void
+    Return : Promise<void>
     ( AuthRequest 파일 loginRequest 함수 사용 )
   */
   const loginClick: any = async (): Promise<void> => {
-    const userData = await loginRequest(email, password);
-    // 로그인 실패시 API 서버에서 "Error" 문자열 반환됨
-    if (userData === "Error") {
-      // App.tsx의 login Hook 함수에 null 반환
-      login(null);
-      // 로그인 실패시 경고창 생성 및 이메일 비빌번호 값 초기화
-      setWarning(true);
-      setEmail("");
-      setPassword("");
+    // 이메일 혹은 비밀번호 입력 안했을 시 로그인 실패 처리
+    if (email === "" || password === "") {
+      // 로그인 실패시 경고창 생성
+      setError(true);
     } else {
-      // App.tsx의 login Hook 함수에 user 객체 반환
-      login(userData);
+      const userData = await loginRequest(email, password);
+      // 로그인 실패시 API 서버에서 Error 객체 반환 후 loginRquest에서 "API Error" 문자열 반환됨
+      if (userData === "API Error") {
+        // App.tsx의 login Hook 함수에 null 반환
+        login(null);
+        // 로그인 응답 실패시 경고창 생성
+        setWarning(true);
+      }
+      // 로그인 실패시 API 서버에서 "Error" 문자열 반환됨
+      else if (userData.data === "Error") {
+        // App.tsx의 login Hook 함수에 null 반환
+        login(null);
+        // 로그인 실패시 경고창 생성
+        setError(true);
+      } else {
+        // App.tsx의 login Hook 함수에 userData.data 객체 반환
+        login(userData.data);
+      }
     }
   };
 
   /*
-    로그인 실패 경고창 끄기 버튼 클릭 함수
+    경고창 끄기 버튼 클릭 함수
     Arguments : void
     Return : void
     ( AuthRequest 파일 loginRequest 함수 사용 )
+    ( 자동 사라짐 기능 의존 함수 )
   */
   const handleClose: any = (
     event?: React.SyntheticEvent,
@@ -87,6 +102,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
     if (reason === "clickaway") {
       return;
     }
+    setError(false);
     setWarning(false);
   };
 
@@ -128,6 +144,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
           name="email"
           autoComplete="email"
           autoFocus
+          defaultValue={email}
           onChange={({ target: { value } }) => setEmail(value)}
         />
 
@@ -142,6 +159,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
           type="password"
           id="password"
           autoComplete="current-password"
+          defaultValue={password}
           onChange={({ target: { value } }) => setPassword(value)}
         />
 
@@ -185,9 +203,16 @@ const LoginPage: React.FC<LoginPageProps> = ({
       </LoginBottomContainer>
 
       {/* 로그인 실패 경고창 */}
-      <Snackbar open={warning} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar open={error} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
           {"이메일 혹은 비빌먼호를 확인하세요!"}
+        </Alert>
+      </Snackbar>
+      {/* 로그인 응답 실패 경고창 */}
+      {/* autoHideDuration Props에 null 설정 시 자동 사라짐 비활성화되므로 주의 */}
+      <Snackbar open={warning} autoHideDuration={10000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          {"에러코드 : 1, 고객센터에 문의해 주세요!"}
         </Alert>
       </Snackbar>
     </Contatiner>
