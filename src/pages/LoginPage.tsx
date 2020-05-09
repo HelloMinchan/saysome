@@ -64,22 +64,22 @@ const LoginPage: React.FC<LoginPageProps> = ({
   const loginClick: any = async (): Promise<void> => {
     // 이메일 혹은 비밀번호 입력 안했을 시 로그인 실패 처리
     if (email === "" || password === "") {
-      // 로그인 실패시 경고창 생성
+      // 로그인 실패 시 경고창 생성
       setError(true);
     } else {
       const userData = await loginRequest(email, password);
-      // 로그인 실패시 API 서버에서 Error 객체 반환 후 loginRquest에서 "API Error" 문자열 반환됨
+      // 로그인 응답 실패 시 API 서버에서 Error 객체 반환 후 loginRquest에서 "API Error" 문자열 반환됨
       if (userData === "API Error") {
         // App.tsx의 login Hook 함수에 null 반환
         login(null);
-        // 로그인 응답 실패시 경고창 생성
+        // 로그인 응답 실패 시 경고창 생성
         setWarning(true);
       }
-      // 로그인 실패시 API 서버에서 "Error" 문자열 반환됨
+      // 로그인 실패 시 API 서버에서 "Error" 문자열 반환됨
       else if (userData.data === "Error") {
         // App.tsx의 login Hook 함수에 null 반환
         login(null);
-        // 로그인 실패시 경고창 생성
+        // 로그인 실패 시 경고창 생성
         setError(true);
       } else {
         // App.tsx의 login Hook 함수에 userData.data 객체 반환

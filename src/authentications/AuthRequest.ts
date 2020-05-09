@@ -23,10 +23,12 @@ const loginAxios = async (
   password: string
 ): Promise<AxiosResponse<UserInfo | string> | string> => {
   try {
+    // 로그인 API 호출
     return await axios(
       `${process.env.REACT_APP_saysome_restful_server}/login/${email}/${password}`
     );
   } catch (error) {
+    // 로그인 응답 실패 시 "API Error" 문자열 반환
     const apiError = "API Error";
     return apiError;
   }
