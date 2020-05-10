@@ -16,6 +16,7 @@ export interface UserInfo {
 /*
   로그인 API 호출 함수
   method: POST
+  Error Code : 1
   Arguments : email, password
   Return : Promise<AxiosResponse<UserInfo | string> | string>
 */

@@ -14,12 +14,13 @@ import { UserInfo } from "./authentications/AuthRequest";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import ErrorPage from "./pages/Errorpage";
+import SignUpPage from "./pages/signup_pages/ControllPage";
 
 /***************************************************************************************
                               SaySome App 컴포넌트
                               Arguments : void
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.07
+                              마지막 수정 : 2020.05.10
 ***************************************************************************************/
 const App: React.FC = (): JSX.Element => {
   // 유저 로그인 상태 hooks ( 변수 : user, 함수 : setUser )
@@ -64,6 +65,13 @@ const App: React.FC = (): JSX.Element => {
             />
           )}
         />
+
+        {/*
+          SignUpPage 라우트
+          URL : /signup
+          Authentication : All
+        */}
+        <Route path="/signup" render={(): JSX.Element => <SignUpPage />} />
 
         {/*
           MainPage 라우트

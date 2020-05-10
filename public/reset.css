@@ -124,8 +124,10 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
+/* ************************** */
 /* 가상 Dom 전역 수정 여기서부터 */
+/* ************************** */
+
 html,
 body {
   height: 100%;
@@ -134,4 +136,23 @@ body {
 #root {
   height: 100%;
   width: 100%;
+}
+
+/* ************************** */
+/* Material-UI 수정 여기서부터 */
+/* ************************** */
+
+/* 회원가입 화면 진행 상태 stepper 원 색깔 */
+.MuiStepIcon-root.MuiStepIcon-active {
+  color: #ff7f00 !important;
+}
+
+/* 회원가입 화면 완료 상태 stepper 원 색깔 */
+.MuiStepIcon-root.MuiStepIcon-completed {
+  color: #ff7f00 !important;
+}
+
+/* 회원가입 화면 버튼 색깔 */
+.MuiButton-containedPrimary {
+  background-color: #ff9f31 !important;
 }

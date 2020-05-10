@@ -190,7 +190,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
           </Grid>
           {/* 회원가입 링크 */}
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link href="#/signup" variant="body2">
               {"아직 회원이 아니신가요? 가입하기"}
             </Link>
           </Grid>
@@ -222,7 +222,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
 /* styled-components */
 // 컨테이너 컴포넌트
 const Contatiner = styled.div`
-  /* background-color: #262626; */
+  /* background-color: #808080; */
   height: 100%;
   width: 50%;
   padding-left: 25%;

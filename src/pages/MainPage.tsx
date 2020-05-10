@@ -28,15 +28,8 @@ function MainPage({ user, authenticated, logout }: MainPageProps) {
       <dd>{password}</dd>
       <dt>Name</dt>
       <dd>{name}</dd>
-      <div>
-        {authenticated ? (
-          <LogoutButton logout={logout} />
-        ) : (
-          <Link to="/login">
-            <button>Login</button>
-          </Link>
-        )}
-      </div>
+
+      <LogoutButton logout={logout} />
     </>
   );
 }
