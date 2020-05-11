@@ -72,7 +72,7 @@ function getStepContent(step: any) {
   }
 }
 
-export default function ControllPage() {
+export default function ControlPage() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -137,13 +137,12 @@ export default function ControllPage() {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
+                  가입신청이 완료되었습니다.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
+                  Hello, 가입자명! Welcome to SaySome!
                 </Typography>
+                <button onClick={gobackClick}>로그인 하러가기</button>
               </React.Fragment>
             ) : (
               <React.Fragment>

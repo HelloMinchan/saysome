@@ -46,7 +46,7 @@ export default function Review() {
 
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
       <List disablePadding>
@@ -88,14 +88,14 @@ export default function Review() {
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="SaySome에 관한 업데이트 소식을 이메일로 받겠습니다."
-          />
-        </Grid>
+      </Grid> */}
+      <Grid item xs={12}>
+        <FormControlLabel
+          control={
+            <Checkbox color="secondary" name="saveAddress" value="yes" />
+          }
+          label="SaySome에 관한 업데이트 소식을 이메일로 받겠습니다."
+        />
       </Grid>
     </React.Fragment>
   );
