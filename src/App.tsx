@@ -14,7 +14,7 @@ import { UserInfo } from "./authentications/AuthRequest";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import ErrorPage from "./pages/Errorpage";
-import SignUpPage from "./pages/signup_pages/ControlPage";
+import SignUpPage from "./pages/signup_pages/SignupControlPage";
 
 /***************************************************************************************
                               SaySome App 컴포넌트
