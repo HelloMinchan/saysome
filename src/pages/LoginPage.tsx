@@ -38,7 +38,7 @@ interface LoginPageProps extends RouteComponentProps<any> {
                               LoginPage 컴포넌트
                               Arguments : LoginPageProps
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.10
+                              마지막 수정 : 2020.05.22
 ***************************************************************************************/
 const LoginPage: React.FC<LoginPageProps> = ({
   authenticated,
@@ -54,6 +54,10 @@ const LoginPage: React.FC<LoginPageProps> = ({
   const [error, setError]: [boolean, Function] = useState<boolean>(false);
   // 로그인 응답 실패 경고창 생성 hooks ( 변수 : warning, 함수 : setWarning )
   const [warning, setWarning]: [boolean, Function] = useState<boolean>(false);
+  // 로그인 응답 실패 에러코드 hooks ( 변수 : warningCode, 함수 : setWarningCode )
+  const [warningCode, setWarningCode]: [string, Function] = useState<string>(
+    ""
+  );
 
   /*
     로그인 버튼 클릭 함수
@@ -73,6 +77,13 @@ const LoginPage: React.FC<LoginPageProps> = ({
         // App.tsx의 login Hook 함수에 null 반환
         login(null);
         // 로그인 응답 실패 시 경고창 생성
+        // 에러코드 : 1
+        setWarningCode("1");
+        setWarning(true);
+      } else if (userData.data.CheckValue === "Database Error") {
+        // 데이터베이스 응답 실패 시 경고창 생성
+        // 에러코드 : 2
+        setWarningCode("2");
         setWarning(true);
       }
       // 로그인 실패 시 API 서버에서 "Error" 문자열 반환됨
@@ -212,7 +223,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
       {/* autoHideDuration Props에 null 설정 시 자동 사라짐 비활성화되므로 주의 */}
       <Snackbar open={warning} autoHideDuration={10000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="warning">
-          {"에러코드 : 1, 고객센터에 문의해 주세요!"}
+          {`에러코드 : ${warningCode}, 고객센터에 문의해 주세요!`}
         </Alert>
       </Snackbar>
     </Contatiner>

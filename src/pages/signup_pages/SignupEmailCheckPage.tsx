@@ -10,7 +10,7 @@ import styled from "styled-components";
                                           authEmailCode,
                                           setAuthEmailCode
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.21
+                              마지막 수정 : 2020.05.22
 ***************************************************************************************/
 const SignupEmailCheckPage: React.FC<any> = ({
   createEmail,
@@ -76,6 +76,7 @@ const SignupEmailCheckPage: React.FC<any> = ({
             id="AuthEmailCode"
             name="AuthEmailCode"
             fullWidth
+            autoFocus
             defaultValue={authEmailCode}
             onChange={({ target: { value } }) => setAuthEmailCode(value)}
             // defaultValue={}

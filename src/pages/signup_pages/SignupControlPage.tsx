@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios, { AxiosResponse } from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -20,6 +21,37 @@ import { useHistory } from "react-router-dom";
 
 // import globalData
 import { logoColor } from "../../globalData";
+
+// import dotenv
+import dotenv from "dotenv";
+
+// import .env
+dotenv.config();
+
+/*
+  이메일 중복체크 API 호출 함수
+  method: POST
+  Error Code : 3, 4
+  Arguments : email
+  Return : Promise<AxiosResponse<string> | any>
+*/
+const emailDuplicateCheckAxios = async (
+  email: string
+): Promise<AxiosResponse<any> | any> => {
+  const form = new FormData();
+  form.append("email", email);
+  try {
+    // 이메일 중복체크 API 호출
+    return await axios.post(
+      `${process.env.REACT_APP_saysome_restful_server}/emailduplicatecheck`,
+      form
+    );
+  } catch (error) {
+    // 로그인 응답 실패 시 "API Error" 문자열 반환
+    const apiError = "API Error";
+    return apiError;
+  }
+};
 
 /*
   경고창 생성 함수
@@ -79,11 +111,12 @@ const useStyles = makeStyles((theme) => ({
                               SignupControlPage 컴포넌트
                               Arguments : void
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.21
+                              마지막 수정 : 2020.05.22
 ***************************************************************************************/
 const SignupControlPage: React.FC = () => {
   // useStyle Call
   const classes = useStyles();
+
   // 회원가입 단계 hooks ( 변수 : activeStep, 함수 : setActiveStep )
   const [activeStep, setActiveStep]: [number, Function] = useState<number>(0);
 
@@ -93,6 +126,16 @@ const SignupControlPage: React.FC = () => {
   const [createEmail, setCreateEmail]: [string, Function] = useState<string>(
     ""
   );
+  // 회원가입 이메일 중복체크 hooks ( 변수 : createEmailDuplicateCheck, 함수 : setCreateEmailDuplicateCheck )
+  const [createEmailDuplicateCheck, setCreateEmailDuplicateCheck]: [
+    boolean,
+    Function
+  ] = useState<boolean>(false);
+  // 회원가입 이메일 중복체크 문구 hooks ( 변수 : createEmailDuplicateCheckSentence, 함수 : setCreateEmailDuplicateCheckSentence )
+  const [
+    createEmailDuplicateCheckSentence,
+    setCreateEmailDuplicateCheckSentence,
+  ]: [string, Function] = useState<string>("");
   // 회원가입 비밀번호1 hooks ( 변수 : createPassword1, 함수 : setCreatePassword1 )
   const [createPassword1, setCreatePassword1]: [string, Function] = useState<
     string
@@ -129,6 +172,56 @@ const SignupControlPage: React.FC = () => {
   const [errorMessage, setErrorMessage]: [string, Function] = useState<string>(
     ""
   );
+  // 이메일 중복체크 응답 실패 경고창 생성 hooks ( 변수 : warning, 함수 : setWarning )
+  const [warning, setWarning]: [boolean, Function] = useState<boolean>(false);
+  // 이메일 중복체크 에러코드 hooks ( 변수 : warningCode, 함수 : setWarningCode )
+  const [warningCode, setWarningCode]: [string, Function] = useState<string>(
+    ""
+  );
+
+  /*
+    이메일 중복체크 함수
+    Arguments : createEmail
+    Return : Promise<void>
+  */
+  const emailDuplicateCheckRequest: Function = async (): Promise<void> => {
+    // 이메일에 @ 혹은 . 이 없을 경우 경고창 생성
+    if (createEmail.indexOf("@") === -1 || createEmail.indexOf(".") === -1) {
+      setCreateEmailDuplicateCheck(false);
+      setCreateEmailDuplicateCheckSentence(
+        "올바르지 않은 이메일 형식입니다! 제대로 입력해 주세요."
+      );
+      return;
+    }
+
+    // 이메일 중복체크 API 호출
+    const data = await emailDuplicateCheckAxios(createEmail);
+
+    // 이메일 중복체크 응답 실패 시 경고창 생성
+    // 에러코드 : 3
+    if (data === "API Error") {
+      setWarningCode("3");
+      setWarning(true);
+    } else {
+      // 데이터베이스 응답 실패 시 경고창 생성
+      // 에러코드 : 4
+      if (data.data.CheckValue === "Database Error") {
+        setWarningCode("4");
+        setWarning(true);
+      }
+      // 이메일 사용 가능한 경우
+      else if (data.data.CheckValue === "OK") {
+        setCreateEmailDuplicateCheck(true);
+        setCreateEmailDuplicateCheckSentence("사용 가능한 이메일 입니다!");
+      } else {
+        // 이메일이 중복된 경우
+        setCreateEmailDuplicateCheck(false);
+        setCreateEmailDuplicateCheckSentence(
+          "중복된 이메일 입니다! 다른 이메일을 사용해주세요."
+        );
+      }
+    }
+  };
 
   /*
     경고창 끄기 버튼 클릭 함수
@@ -144,6 +237,7 @@ const SignupControlPage: React.FC = () => {
       return;
     }
     setError(false);
+    setWarning(false);
   };
 
   // 회원가입 단계 표시 리스트
@@ -167,6 +261,10 @@ const SignupControlPage: React.FC = () => {
           <SignupUserInfoPage
             createName={createName}
             createEmail={createEmail}
+            createEmailDuplicateCheck={createEmailDuplicateCheck}
+            createEmailDuplicateCheckSentence={
+              createEmailDuplicateCheckSentence
+            }
             createPassword1={createPassword1}
             createPassword2={createPassword2}
             createFavoriteFood={createFavoriteFood}
@@ -175,6 +273,7 @@ const SignupControlPage: React.FC = () => {
             setCreatePassword1={setCreatePassword1}
             setCreatePassword2={setCreatePassword2}
             setCreateFavoriteFood={setCreateFavoriteFood}
+            emailDuplicateCheckRequest={emailDuplicateCheckRequest}
           />
         );
       // 이메일 인증 단계
@@ -230,6 +329,13 @@ const SignupControlPage: React.FC = () => {
       // 작성한 비밀번호가 불일치 시 경고창 생성
       if (createPassword1 !== createPassword2) {
         setErrorMessage("작성하신 비빌먼호가 일치하지 않습니다!");
+        setError(true);
+        return;
+      }
+
+      // 이메일 중복체크 안했을 시 경고 창 생성
+      if (createEmailDuplicateCheck === false) {
+        setErrorMessage("이메일 중복체크를 완료해 주셔야 합니다!");
         setError(true);
         return;
       }
@@ -375,6 +481,13 @@ const SignupControlPage: React.FC = () => {
       <Snackbar open={error} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
           {errorMessage}
+        </Alert>
+      </Snackbar>
+      {/* 로그인 응답 실패 경고창 */}
+      {/* autoHideDuration Props에 null 설정 시 자동 사라짐 비활성화되므로 주의 */}
+      <Snackbar open={warning} autoHideDuration={10000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          {`에러코드 : ${warningCode}, 고객센터에 문의해 주세요!`}
         </Alert>
       </Snackbar>
     </React.Fragment>

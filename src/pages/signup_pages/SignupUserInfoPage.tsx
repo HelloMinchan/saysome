@@ -1,14 +1,17 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 
-import styled from "styled-components";
+import styled, { css, StyledComponent } from "styled-components";
 
 /***************************************************************************************
                               SignupUserInfoPage 컴포넌트
                               Arguments : createName,
                                           createEmail,
+                                          createEmailDuplicateCheck,
+                                          createEmailDuplicateCheckSentence,
                                           createPassword1,
                                           createPassword2,
                                           createFavoriteFood,
@@ -17,12 +20,15 @@ import styled from "styled-components";
                                           setCreatePassword1,
                                           setCreatePassword2,
                                           setCreateFavoriteFood,
+                                          emailDuplicateCheckRequest,
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.21
+                              마지막 수정 : 2020.05.22
 ***************************************************************************************/
 const SignupUserInfoPage: React.FC<any> = ({
   createName,
   createEmail,
+  createEmailDuplicateCheck,
+  createEmailDuplicateCheckSentence,
   createPassword1,
   createPassword2,
   createFavoriteFood,
@@ -31,6 +37,7 @@ const SignupUserInfoPage: React.FC<any> = ({
   setCreatePassword1,
   setCreatePassword2,
   setCreateFavoriteFood,
+  emailDuplicateCheckRequest,
 }) => {
   return (
     <React.Fragment>
@@ -71,6 +78,27 @@ const SignupUserInfoPage: React.FC<any> = ({
 
       <Separation />
 
+      <EmailDuplicateCheck
+        createEmailDuplicateCheck={createEmailDuplicateCheck}
+      >
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={emailDuplicateCheckRequest}
+        >
+          {"이메일 중복체크"}
+        </Button>
+        <Typography
+          variant="body1"
+          gutterBottom
+          style={{ paddingLeft: "15px", paddingTop: "7px" }}
+        >
+          {createEmailDuplicateCheckSentence}
+        </Typography>
+      </EmailDuplicateCheck>
+
+      <Separation />
+
       {/* 비밀번호 기입란 */}
       <Typography variant="h6" gutterBottom style={{ marginBottom: "-3px" }}>
         비밀번호를 입력해 주세요.
@@ -80,9 +108,10 @@ const SignupUserInfoPage: React.FC<any> = ({
           required
           id="Password1"
           name="Password1"
+          type="password"
           label="비밀번호 : 예) 1q2w3e4r!"
           fullWidth
-          autoComplete="billing address-level2"
+          autoComplete="current-password"
           defaultValue={createPassword1}
           onChange={({ target: { value } }) => setCreatePassword1(value)}
         />
@@ -99,9 +128,10 @@ const SignupUserInfoPage: React.FC<any> = ({
           required
           id="Password2"
           name="Password2"
+          type="password"
           label="비밀번호 확인 : 예) 1q2w3e4r!"
           fullWidth
-          autoComplete="billing address-level2"
+          autoComplete="current-password"
           defaultValue={createPassword2}
           onChange={({ target: { value } }) => setCreatePassword2(value)}
         />
@@ -133,6 +163,26 @@ const SignupUserInfoPage: React.FC<any> = ({
 const Separation = styled.div`
   margin-top: 20px;
   padding-bottom: 20px;
+`;
+
+// 이메일 중복 체크 칸 컴포넌트
+/*
+  styled-components에 props 사용 시 type 지정을 해줘야 함
+  StyledComponent type import 한 후 제네릭 4번째 인자에 props type 지정
+*/
+const EmailDuplicateCheck: StyledComponent<"div", any, {}, any> = styled.div`
+  display: flex;
+  ${(props: any) => {
+    if (props.createEmailDuplicateCheck) {
+      return css`
+        color: green;
+      `;
+    } else {
+      return css`
+        color: red;
+      `;
+    }
+  }}
 `;
 
 export default SignupUserInfoPage;
