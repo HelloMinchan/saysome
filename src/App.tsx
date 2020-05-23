@@ -20,7 +20,7 @@ import SignUpPage from "./pages/signup_pages/SignupControlPage";
                               SaySome App 컴포넌트
                               Arguments : void
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.11
+                              마지막 수정 : 2020.05.23
 ***************************************************************************************/
 const App: React.FC = (): JSX.Element => {
   // 유저 로그인 상태 hooks ( 변수 : user, 함수 : setUser )
@@ -82,13 +82,7 @@ const App: React.FC = (): JSX.Element => {
           authenticated={authenticated}
           exact
           path="/"
-          render={(): JSX.Element => (
-            <MainPage
-              user={user}
-              authenticated={authenticated}
-              logout={logout}
-            />
-          )}
+          render={(): JSX.Element => <MainPage user={user} logout={logout} />}
         />
 
         {/*

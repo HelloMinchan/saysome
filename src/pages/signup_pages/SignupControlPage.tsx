@@ -38,12 +38,53 @@ dotenv.config();
 const emailDuplicateCheckAxios = async (
   email: string
 ): Promise<AxiosResponse<any> | any> => {
+  // form 생성
   const form = new FormData();
+  // form에 데이터 추가
   form.append("email", email);
+
   try {
     // 이메일 중복체크 API 호출
     return await axios.post(
       `${process.env.REACT_APP_saysome_restful_server}/emailduplicatecheck`,
+      form
+    );
+  } catch (error) {
+    // 로그인 응답 실패 시 "API Error" 문자열 반환
+    const apiError = "API Error";
+    return apiError;
+  }
+};
+
+/*
+  회원가입 신청 API 호출 함수
+  method: POST
+  Error Code : 3, 4
+  Arguments : email, password, name, food, provisionAccept, emailReceptionAccept
+  Return : Promise<AxiosResponse<string> | any>
+*/
+const signupApplyAxios = async (
+  email: string,
+  password: string,
+  name: string,
+  food: string,
+  provisionAccept: Boolean,
+  emailReceptionAccept: Boolean
+): Promise<AxiosResponse<any> | any> => {
+  // form 생성
+  const form = new FormData();
+  // form에 데이터 추가
+  form.append("email", email);
+  form.append("password", password);
+  form.append("name", name);
+  form.append("food", food);
+  form.append("provisionAccept", provisionAccept.toString());
+  form.append("emailReceptionAccept", emailReceptionAccept.toString());
+
+  try {
+    // 이메일 중복체크 API 호출
+    return await axios.post(
+      `${process.env.REACT_APP_saysome_restful_server}/signupapply`,
       form
     );
   } catch (error) {
@@ -111,7 +152,7 @@ const useStyles = makeStyles((theme) => ({
                               SignupControlPage 컴포넌트
                               Arguments : void
                               Return : FunctionComponent
-                              마지막 수정 : 2020.05.22
+                              마지막 수정 : 2020.05.23
 ***************************************************************************************/
 const SignupControlPage: React.FC = () => {
   // useStyle Call
@@ -224,6 +265,47 @@ const SignupControlPage: React.FC = () => {
   };
 
   /*
+    회원가입 신청 함수
+    Arguments : createEmail, createPassword1, createName, createFavoriteFood, provisionAcceptCheck,emailReceptionAcceptCheck
+    Return : Promise<void>
+  */
+  const signupApplyRequest: Function = async (): Promise<void | string> => {
+    // 이메일 중복체크 API 호출
+    const data = await signupApplyAxios(
+      createEmail,
+      createPassword1,
+      createName,
+      createFavoriteFood,
+      provisionAcceptCheck,
+      emailReceptionAcceptCheck
+    );
+
+    // 회원가입 신청 응답 실패 시 경고창 생성
+    // 에러코드 : 5
+    if (data === "API Error") {
+      setWarningCode("5");
+      setWarning(true);
+    } else {
+      // 데이터베이스 응답 실패 시 경고창 생성
+      // 에러코드 : 6
+      if (data.data.CheckValue === "Database Error") {
+        setWarningCode("6");
+        setWarning(true);
+      }
+      // 데이터베이스에 쿼리 수행은 됬는데 결과 에러 발생 시 경고창 생성
+      // 에러코드 : 7
+      else if (data.data.CheckValue === "Database Error2") {
+        setWarningCode("7");
+        setWarning(true);
+      }
+      // 이메일 사용 가능한 경우
+      else {
+        return "OK";
+      }
+    }
+  };
+
+  /*
     경고창 끄기 버튼 클릭 함수
     Arguments : void
     Return : void
@@ -310,7 +392,7 @@ const SignupControlPage: React.FC = () => {
     Arguments : void
     Return : void
   */
-  const handleStepNext: any = (): void => {
+  const handleStepNext: any = async (): Promise<void> => {
     // 회원정보 입력 단계
     if (activeStep === 0) {
       // 회원정보 미 기입 시 경고창 생성
@@ -333,7 +415,7 @@ const SignupControlPage: React.FC = () => {
         return;
       }
 
-      // 이메일 중복체크 안했을 시 경고 창 생성
+      // 이메일 중복체크 안했을 시 경고창 생성
       if (createEmailDuplicateCheck === false) {
         setErrorMessage("이메일 중복체크를 완료해 주셔야 합니다!");
         setError(true);
@@ -342,6 +424,7 @@ const SignupControlPage: React.FC = () => {
     }
     // 이메일 인증 단계
     else if (activeStep === 1) {
+      // 이메일 인증 코드가 유효하지 않을 시 경고창 생성
       if (authEmailCode !== "1234") {
         setErrorMessage("인증코드가 유효하지 않습니다!");
         setError(true);
@@ -350,13 +433,20 @@ const SignupControlPage: React.FC = () => {
     }
     // 회원가입 신청 단계
     else if (activeStep === 2) {
+      // 이용약관 체크 안했을 시 경고창 생성
       if (provisionAcceptCheck === false) {
         setErrorMessage("필수 사항은 반드시 체크하셔야 합니다!");
         setError(true);
         return;
       }
+
+      // 데이터베이스에 회원정보 기록 실패 시 다음 화면으로 이동 막음
+      if ((await signupApplyRequest()) !== "OK") {
+        return;
+      }
     }
-    // 위 조건 통과 시 다음 단계 진행
+
+    // 위의 모든 조건들 통과 시 다음 단계 진행
     setActiveStep(activeStep + 1);
   };
 
@@ -433,12 +523,22 @@ const SignupControlPage: React.FC = () => {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  가입신청이 완료되었습니다.
+                  안녕하세요 {createName}님! 가입신청이 완료되었습니다.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Hello, 가입자명! Welcome to SaySome!
+                  아래의 로그인 하러가기 버튼을 눌러 로그인 후 SaySome의 모든
+                  기능을 이용해보세요!
                 </Typography>
-                <button onClick={goLoginPageClick}>로그인 하러가기</button>
+                <SignupFinishLoginButtonPosition>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    onClick={goLoginPageClick}
+                  >
+                    로그인 하러가기
+                  </Button>
+                </SignupFinishLoginButtonPosition>
               </React.Fragment>
             ) : (
               <React.Fragment>
@@ -515,4 +615,10 @@ const LoginBottomContainer = styled.div`
   width: 100%;
 `;
 
+// 회원가입 완료 후 로그인 하러가기 버튼 위치 조절 컴포넌트
+const SignupFinishLoginButtonPosition = styled.div`
+  display: flex;
+  padding-top: 20px;
+  justify-content: center;
+`;
 export default SignupControlPage;

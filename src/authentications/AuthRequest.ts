@@ -11,6 +11,9 @@ export interface UserInfo {
   email: string;
   password: string;
   name: string;
+  food: string;
+  provisionAccept: Boolean;
+  emailReceptionAccept: Boolean;
 }
 
 /*
@@ -24,9 +27,12 @@ const loginAxios = async (
   email: string,
   password: string
 ): Promise<AxiosResponse<UserInfo | string> | string> => {
+  // form 생성
   const form = new FormData();
+  // form에 데이터 추가
   form.append("email", email);
   form.append("password", password);
+
   try {
     // 로그인 API 호출
     return await axios.post(
