@@ -28,7 +28,13 @@ SaySome Desktop Client.
 * clone 후 해야 할 일   
   * npm i
   * yarn install
-  * .env, .env.development, .env.production 초기화 (파일명에서 fake_ 지울 것.)
+  * .env, .env.development, .env.production 초기화 (파일명에서 fake_ 지울 것)
+- - -
+* scripts 명령
+  * 실행 : yarn start
+  * 빌드 : yarn build   
+  (React는 build 폴더에, Electron은 dist 폴더에 생성됨)
+  *	배포 : yarn release
 - - -
 * Error Code
   * 1 : 로그인 API 에러
@@ -51,4 +57,4 @@ SaySome Desktop Client.
     + 가능 원인 : 데이터베이스 서버 다운
   * 7 : 회원가입 신청 API 에러
     + 코드 위치 : src/pages/signup_pages/signupControlPage.tsx
-    + 가능 원인 : 데이터베이스 내부 에러 (INSERT 쿼리가 비정상적으로 수행됨.)
+    + 가능 원인 : 데이터베이스 내부 에러 (INSERT 쿼리가 비정상적으로 수행됨)
