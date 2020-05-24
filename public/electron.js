@@ -11,18 +11,20 @@ function createWindow() {
         //alwaysOnTop: true,
         //fullscreen: true,
         //kiosk: !isDev,
-        // 실행 시 창 가운데 위치
+        // 실행 시 윈도우 가운데 위치
         center: true,
-        // 브라우저 크기 조절 허용
+        // 윈도우 크기 조절 허용
         resizable: true,
-        // 브라우저 기본 높이
+        // 윈도우 기본 너비
         width: 900,
-        // 브라우저 최소 높이
+        // 윈도우 기본 높이
         height: 600,
-        // 브라우저 최소 넓이
+        // 윈도우 최소 너비
         minWidth: 900,
-        // 브라우저 최소 높이
+        // 윈도우 최소 높이
         minHeight: 600,
+        // 윈도우 메뉴바 숨김(Windows 운영체제)
+        autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true
         }
