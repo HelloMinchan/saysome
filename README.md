@@ -6,14 +6,17 @@ SaySome Desktop Client.
 <img src="https://user-images.githubusercontent.com/52199223/82762655-348beb00-9e3d-11ea-8694-f72eacdfffb2.PNG"><img>   
 - - -
 * 빌드 버전 기록   
-  * Node version : 12.13.0   
-  * Electron version : 8.2.3   
-  * Chromium version : 80.0.3987.163   
+  * Node : 12.13.0
+  * TypeScript : 3.8.3
+  * Electron : 8.2.3
+  * Chromium : 80.0.3987.163
+  * React : 16.13.1
 - - -
 * 사용 모듈
+  * TypeScript
   * Electron
   * React
-  * TypeScript
+  * react-router-dom
   * GraphQL
   * Apollo
   * styled-components
