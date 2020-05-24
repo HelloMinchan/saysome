@@ -12,7 +12,7 @@ SaySome Desktop Client.
   * Chromium : 80.0.3987.163
   * React : 16.13.1
 - - -
-* 사용 모듈
+* 의존 프레임워크 및 라이브러리
   * TypeScript
   * Electron
   * React
