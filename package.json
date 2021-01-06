@@ -16,7 +16,7 @@
     "@types/react-router-dom": "5.1.5",
     "@types/styled-components": "5.1.0",
     "apollo-boost": "0.4.7",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "electron-is-dev": "1.2.0",
     "graphql": "15.0.0",
     "react": "^16.13.1",
